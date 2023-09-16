@@ -1,0 +1,15 @@
+# Wykorzystanie oficjalnego obrazu MariaDB jako obrazu głównego
+FROM mariadb:10.5
+
+USER root
+RUN chmod 777 /var/lib/mysql
+RUN chmod 777 /var/lib/mysql/
+
+# Zmienne środowiskowe dla bazy danych MariaDB
+ENV MYSQL_ROOT_PASSWORD=toor
+ENV MYSQL_DATABASE=wp
+ENV MYSQL_USER=sqladmin
+ENV MYSQL_PASSWORD=sqladmin
+
+# Port dla bazy danych MariaDB
+EXPOSE 3306
