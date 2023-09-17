@@ -1,0 +1,36 @@
+# Wykorzystanie oficjalnego obrazu Jenkins LTS jako obrazu głównego
+FROM jenkins/jenkins:latest
+
+# Pominięcie kreatora konfiguracji początkowej
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+# Dane konta administratora w Jenkins
+ENV JENKINS_USER=root
+ENV JENKINS_PASS=toor
+
+# Instalacja dodatkowych narzędzi oraz paczek
+USER root
+
+RUN apt-get update
+RUN apt-get install mariadb-client net-tools -y
+
+# Utworzenie oraz nadanie uprawnień dla katalogu "jenkins_home"
+
+RUN touch /var/jenkins_home/copy_reference_file.log
+RUN chmod 777 /var/jenkins_home
+RUN chmod 777 /var/jenkins_home/
+RUN chmod 777 /var/jenkins_home/copy_reference_file.log
+
+# # Zmienne środowiskowe dla utworzonej bazy danych MariaDB
+ENV MYSQL_HOST=wp.014158-taenvironment-tuc.svc.cluster.local
+ENV MYSQL_PORT=3306
+ENV MYSQL_ROOT_PASSWORD=toor
+ENV MYSQL_DATABASE=wp
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=toor
+
+# Port dla aplikacji Jenkins
+EXPOSE 8080
+
+# Start Jenkins
+CMD ["java", "-jar", "/usr/share/jenkins/jenkins.war"]
